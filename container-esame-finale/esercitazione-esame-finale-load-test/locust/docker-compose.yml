@@ -1,0 +1,29 @@
+services:
+  master:
+    build: .
+    environment:
+      LOCUST_HOST: http://localhost:8000
+    ports:
+     - "8089:8089"
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --master
+    networks:
+      - default
+      - testing_api
+        
+  worker:
+    build: .
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --worker --master-host master
+    networks:
+      - default
+      - testing_api
+
+networks:
+  default:
+    name: esercitazione-esame-finale-load-test_default
+  testing_api:
+    name: external_bridge
+    external: true

@@ -1,0 +1,40 @@
+services:  
+  mysql:
+    image: mysql:latest
+    container_name: fastapi-db
+    environment:
+      MYSQL_ROOT_PASSWORD: fastapiroot
+      MYSQL_DATABASE: fastapi
+      MYSQL_USER: fastapi
+      MYSQL_PASSWORD: QWERTYY12345
+    ports:
+      - '3306:3306'
+    networks:
+      - default
+      - testing_api  
+    volumes:
+      - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: fastapi-db
+      PMA_USER: fastapi
+      PMA_PASSWORD: QWERTYY12345
+    ports:
+      - '8081:80'
+    depends_on:
+      - mysql     
+
+
+volumes:
+  db_data:
+   driver: local
+
+networks:
+  default:
+    name: esercitazione-esame-finale-db_default
+  testing_api:
+    name: external_bridge
+    external: true
